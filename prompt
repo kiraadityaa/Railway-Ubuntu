@@ -1,0 +1,1177 @@
+Buat sebuah aplikasi web bernama Adjust Quality menggunakan Next.js.
+
+Tujuan utama aplikasi ini adalah menerima file video dari user, menganalisis karakteristik teknis video tersebut, kemudian melakukan kompresi/encoding secara cerdas agar ukuran file lebih kecil tetapi kualitas visual tetap setinggi mungkin ketika video digunakan untuk WhatsApp Status.
+
+Aplikasi harus berfokus pada mempertahankan kualitas HD, ketajaman, frame rate, warna, dan kompatibilitas video, bukan sekadar mengecilkan ukuran file.
+
+1. Konsep utama aplikasi
+
+Nama aplikasi:
+
+Adjust Quality
+
+Fungsi utama:
+
+1. User memilih atau memasukkan file video.
+2. Aplikasi membaca informasi teknis video.
+3. Aplikasi melakukan analisis terhadap:
+   - format/container
+   - codec
+   - resolusi
+   - frame rate
+   - bitrate
+   - durasi
+   - pixel format
+   - color space
+   - color primaries
+   - transfer characteristics
+   - audio codec
+   - audio bitrate
+   - audio sample rate
+   - jumlah channel audio
+   - rotation
+   - ukuran file
+4. Berdasarkan hasil analisis, aplikasi menentukan parameter encoding yang paling masuk akal untuk WhatsApp Status.
+5. Video diproses menggunakan FFmpeg/FFprobe.
+6. Hasil akhir harus mempertahankan kualitas visual semaksimal mungkin sambil mengurangi ukuran file.
+7. User dapat mengunduh hasil video yang telah diproses.
+8. Aplikasi harus menampilkan informasi sebelum dan sesudah proses sehingga user dapat mengetahui perubahan ukuran dan parameter video.
+
+2. Target karakteristik video
+
+Gunakan video contoh berikut sebagai salah satu referensi target kualitas:
+
+File Name                       : vid.mp4
+Directory                       : .
+File Size                       : 29 MB
+File Modification Date/Time     : 2026:09:13 18:40:20+07:00
+File Access Date/Time           : 2026:09:13 18:31:24+07:00
+File Inode Change Date/Time     : 2026:09:13 20:42:26+07:00
+File Permissions                : -rw-rw----
+File Type                       : MP4
+File Type Extension             : mp4
+MIME Type                       : video/mp4
+Major Brand                     : MP4 Base Media v1 [IS0 14496-12:2003]
+Minor Version                   : 0.2.0
+Compatible Brands               : isom, iso2, avc1, mp41
+Movie Header Version            : 0
+Create Date                     : 0000:00:00 00:00:00
+Modify Date                     : 0000:00:00 00:00:00
+Time Scale                      : 1000
+Duration                        : 0:00:30
+Preferred Rate                  : 1
+Preferred Volume               : 100.00%
+Preview Time                    : 0 s
+Preview Duration                : 0 s
+Poster Time                     : 0 s
+Selection Time                  : 0 s
+Selection Duration              : 0 s
+Current Time                    : 0 s
+Next Track ID                   : 3
+Track Header Version            : 0
+Track Create Date               : 0000:00:00 00:00:00
+Track Modify Date               : 0000:00:00 00:00:00
+Track ID                        : 1
+Track Duration                  : 0:00:30
+Track Layer                     : 0
+Track Volume                    : 0.00%
+Image Width                     : 1080
+Image Height                    : 1080
+Graphics Mode                   : srcCopy
+Op Color                        : 0 0 0
+Compressor ID                   : avc1
+Source Image Width              : 1080
+Source Image Height             : 1080
+X Resolution                    : 72
+Y Resolution                    : 72
+Compressor Name                 : Lavc59.37.100 libx264
+Bit Depth                       : 24
+Color Profiles                  : nclx
+Color Primaries                : BT.709
+Transfer Characteristics        : BT.709
+Matrix Coefficients             : BT.709
+Video Full Range Flag           : Limited
+Buffer Size                     : 5000000
+Max Bitrate                     : 40000000
+Average Bitrate                 : 7488616
+Video Frame Rate                : 60
+Matrix Structure                : 1 0 0 0 1 0 0 0 1
+Media Header Version            : 0
+Media Create Date               : 0000:00:00 00:00:00
+Media Modify Date              : 0000:00:00 00:00:00
+Media Time Scale                : 48000
+Media Duration                 : 0:00:30
+Media Language Code             : eng
+Handler Description             : SoundHandle
+Balance                         : 0
+Audio Format                    : mp4a
+Audio Channels                 : 2
+Audio Bits Per Sample          : 16
+Audio Sample Rate              : 48000
+Handler Type                   : Metadata
+Handler Vendor ID              : Apple
+Encoder                         : Lavf59.27.100
+Media Data Size                : 28916976
+Media Data Offset              : 45789
+Image Size                     : 1080x1080
+Megapixels                     : 1.2
+Avg Bitrate                    : 7.61 Mbps
+Rotation                       : 0
+
+Format                                   : MPEG-4
+Format profile                           : Base Media
+Codec ID                                 : isom (isom/iso2/avc1/mp41)
+File size                                : 27.6 MiB
+Duration                                 : 30 s 400 ms
+Overall bit rate                         : 7 622 kb/s
+Frame rate                               : 60.000 FPS
+Writing application                      : Lavf59.27.100
+
+Video
+ID                                       : 1
+Format                                   : AVC
+Format/Info                              : Advanced Video Codec
+Format profile                           : High@L4.2
+Format settings                          : CABAC / 4 Ref Frames
+Format settings, CABAC                   : Yes
+Format settings, Reference frames        : 4 frames
+Codec ID                                 : avc1
+Codec ID/Info                            : Advanced Video Coding
+Duration                                 : 30 s 367 ms
+Bit rate                                 : 7 489 kb/s
+Maximum bit rate                         : 40.0 Mb/s
+Width                                    : 1 080 pixels
+Height                                   : 1 080 pixels
+Display aspect ratio                     : 1.000
+Frame rate mode                          : Constant
+Frame rate                               : 60.000 FPS
+Color space                              : YUV
+Chroma subsampling                       : 4:2:0
+Bit depth                                : 8 bits
+Scan type                                : Progressive
+Bits/(Pixel*Frame)                       : 0.107
+Stream size                              : 27.1 MiB (98%)
+Title                                    : VideoHandle
+Writing library                          : x264 core 164 r3095 baee400
+Encoding settings                        : cabac=1 / ref=1 / deblock=1:0:0 / analyse=0x3:0x113 / me=hex / subme=2 / psy=1 / psy_rd=1.00:0.00 / mixed_ref=0 / me_range=16 / chroma_me=1 / trellis=0 / 8x8dct=1 / cqm=0 / deadzone=21,11 / fast_pskip=1 / chroma_qp_offset=0 / threads=4 / lookahead_threads=1 / sliced_threads=0 / nr=0 / decimate=1 / interlaced=0 / bluray_compat=0 / constrained_intra=0 / bframes=3 / b_pyramid=2 / b_adapt=1 / b_bias=0 / direct=1 / weightb=1 / open_gop=0 / weightp=1 / keyint=250 / keyint_min=25 / scenecut=40 / intra_refresh=0 / rc_lookahead=10 / rc=crf / mbtree=1 / crf=17.0 / qcomp=0.60 / qpmin=0 / qpmax=69 / qpstep=4 / vbv_maxrate=40000 / vbv_bufsize=40000 / crf_max=0.0 / nal_hrd=none / filler=0 / ip_ratio=1.40 / aq=1:1.00
+Language                                 : English
+Color range                              : Limited
+Color primaries                          : BT.709
+Transfer characteristics                 : BT.709
+Matrix coefficients                      : BT.709
+Codec configuration box                  : avcC
+
+Audio
+ID                                       : 2
+Format                                   : AAC LC
+Format/Info                              : Advanced Audio Codec Low Complexity
+Codec ID                                 : mp4a-40-2
+Duration                                 : 30 s 400 ms
+Source duration                          : 30 s 421 ms
+Bit rate mode                            : Constant
+Bit rate                                 : 129 kb/s
+Channel(s)                               : 2 channels
+Channel layout                           : L R
+Sampling rate                            : 48.0 kHz
+Frame rate                               : 46.875 FPS (1024 SPF)
+Compression mode                         : Lossy
+Stream size                              : 480 KiB (2%)
+Source stream size                       : 480 KiB (2%)
+Title                                    : SoundHandle
+Language                                 : English
+Default                                  : Yes
+Alternate group                          : 1
+
+Jangan menganggap metadata contoh tersebut sebagai spesifikasi mutlak untuk semua video. Gunakan metadata tersebut sebagai referensi untuk membangun sistem analisis dan encoding yang menghasilkan karakteristik video yang serupa atau optimal untuk target WhatsApp Status.
+
+3. Gunakan FFprobe untuk menganalisis video
+
+Implementasikan analisis video menggunakan FFprobe.
+
+Jangan hanya menjalankan "ffprobe video.mp4" lalu melakukan parsing teks secara manual jika output JSON dapat digunakan.
+
+Gunakan format JSON seperti:
+
+ffprobe -v quiet \
+-print_format json \
+-show_format \
+-show_streams \
+-show_chapters \
+input.mp4
+
+Parsing hasil JSON tersebut secara programatis.
+
+Informasi yang perlu diambil minimal:
+
+File
+
+- filename
+- filesize
+- MIME type
+- extension
+- container format
+
+Video stream
+
+- codec_name
+- codec_long_name
+- profile
+- codec_tag_string
+- width
+- height
+- coded_width
+- coded_height
+- display_aspect_ratio
+- sample_aspect_ratio
+- pix_fmt
+- level
+- color_range
+- color_space
+- color_transfer
+- color_primaries
+- chroma_location
+- field_order
+- r_frame_rate
+- avg_frame_rate
+- time_base
+- duration
+- bit_rate
+- max_bit_rate
+- nb_frames
+- disposition
+- tags
+
+Audio stream
+
+- codec_name
+- codec_long_name
+- sample_rate
+- channels
+- channel_layout
+- sample_fmt
+- bits_per_sample
+- duration
+- bit_rate
+- profile
+- language
+- tags
+
+Container
+
+- format_name
+- format_long_name
+- duration
+- size
+- bit_rate
+- start_time
+- tags
+
+4. Jangan melakukan kompresi secara buta
+
+Sistem tidak boleh selalu menggunakan satu bitrate atau satu preset untuk semua video.
+
+Buat adaptive encoding system.
+
+Contoh:
+
+Jika input:
+
+- 1080x1080
+- 60 FPS
+- H.264
+- bitrate sekitar 7.6 Mbps
+- durasi 30 detik
+
+maka sistem harus mempertimbangkan untuk mempertahankan:
+
+- resolusi 1080x1080
+- FPS 60 jika memang diperlukan
+- H.264
+- pixel format yang kompatibel
+- BT.709 jika sumber menggunakan BT.709
+- audio AAC
+- container MP4
+
+Tetapi bitrate video dapat diturunkan secara terkontrol karena bitrate sumber 7.6 Mbps belum tentu diperlukan untuk mempertahankan kualitas yang baik.
+
+Jangan otomatis mengubah video 1080p menjadi 720p hanya karena ingin mengecilkan file.
+
+Prioritaskan:
+
+resolution preservation > frame-rate preservation > color preservation > visual quality > file size
+
+Namun sistem harus tetap mempertimbangkan ukuran file akhir dan kompatibilitas WhatsApp.
+
+5. Strategi encoding
+
+Gunakan FFmpeg dengan encoder H.264 yang kompatibel secara luas.
+
+Prioritaskan:
+
+libx264
+
+Gunakan pixel format yang kompatibel:
+
+yuv420p
+
+Gunakan container:
+
+MP4
+
+Gunakan audio:
+
+AAC
+
+Gunakan faststart:
+
+-movflags +faststart
+
+Tujuan "faststart" adalah memastikan metadata MP4 ditempatkan pada posisi yang sesuai untuk pemutaran/progressive loading.
+
+6. Adaptive bitrate
+
+Buat algoritma untuk menentukan bitrate berdasarkan:
+
+- resolusi
+- FPS
+- durasi
+- complexity video
+- bitrate sumber
+- ukuran file sumber
+
+Jangan meng-hardcode satu nilai bitrate untuk seluruh video.
+
+Contoh konsep:
+
+1080p 60fps:
+    gunakan bitrate lebih tinggi dibanding 1080p 30fps
+
+1080p 30fps:
+    bitrate lebih rendah daripada 1080p 60fps
+
+720p:
+    bitrate lebih rendah daripada 1080p
+
+video dengan banyak gerakan:
+    bitrate lebih tinggi
+
+video statis:
+    bitrate dapat lebih rendah
+
+Jika memungkinkan, lakukan analisis kompleksitas video menggunakan sampling frame atau statistik FFmpeg sebelum menentukan bitrate final.
+
+Jangan melakukan two-pass encoding jika biaya CPU dan waktu tidak sebanding dengan manfaatnya untuk penggunaan web sederhana. Namun arsitektur kode harus memungkinkan two-pass ditambahkan kemudian.
+
+7. Pertahankan resolusi
+
+Sistem harus memiliki aturan berikut:
+
+Jika video input:
+
+1080x1920
+
+usahakan output tetap:
+
+1080x1920
+
+Jika:
+
+1920x1080
+
+usahakan tetap:
+
+1920x1080
+
+Jika:
+
+1080x1080
+
+usahakan tetap:
+
+1080x1080
+
+Jangan melakukan upscale.
+
+Jika video lebih besar daripada target yang masuk akal untuk WhatsApp Status, sistem boleh melakukan downscale secara proporsional.
+
+Contoh:
+
+2160x3840
+
+dapat diturunkan menjadi:
+
+1080x1920
+
+dengan mempertahankan aspect ratio.
+
+Jangan pernah melakukan stretching.
+
+Gunakan perhitungan aspect ratio yang benar.
+
+8. Pertahankan FPS secara cerdas
+
+Jika input:
+
+60 fps
+
+jangan otomatis mengubahnya menjadi 30 fps.
+
+Pertahankan 60 FPS jika bitrate dan ukuran file masih masuk akal.
+
+Jika video input memiliki frame rate yang sangat tinggi, sistem dapat mempertimbangkan pengurangan FPS untuk kompatibilitas/ukuran.
+
+Jangan melakukan frame interpolation.
+
+Jangan membuat FPS palsu.
+
+Jika sumber sebenarnya 30 FPS, output tidak boleh dipaksa menjadi 60 FPS.
+
+9. Pertahankan warna
+
+Perhatikan metadata:
+
+Color Primaries: BT.709
+Transfer Characteristics: BT.709
+Matrix Coefficients: BT.709
+Video Full Range Flag: Limited
+
+Jika input menggunakan BT.709, pertahankan BT.709.
+
+Jangan melakukan konversi warna yang tidak diperlukan.
+
+Hindari perubahan warna, washed-out image, crushed blacks, atau oversaturated image.
+
+Jika menggunakan:
+
+-pix_fmt yuv420p
+
+pastikan conversion dilakukan dengan benar.
+
+Pertimbangkan penggunaan:
+
+-colorspace bt709
+-color_primaries bt709
+-color_trc bt709
+
+hanya jika memang sesuai dengan karakteristik input/output.
+
+Jangan menambahkan metadata warna secara sembarangan jika sumber menggunakan color space lain.
+
+10. Audio
+
+Pertahankan audio jika memang ada.
+
+Gunakan AAC untuk output MP4.
+
+Contoh target:
+
+AAC
+48 kHz
+stereo
+
+Gunakan bitrate audio yang masuk akal, misalnya sekitar:
+
+128k
+
+atau adaptive bitrate jika diperlukan.
+
+Jangan meningkatkan sample rate sumber.
+
+Jika sumber 44.1 kHz, jangan mengubahnya ke 96 kHz hanya untuk membuat angka lebih besar.
+
+Jika sumber mono, jangan dipaksa menjadi stereo tanpa alasan.
+
+11. Metadata
+
+Usahakan metadata teknis penting tetap konsisten.
+
+Output idealnya memiliki karakteristik seperti:
+
+Format: MP4
+Video codec: H.264 / AVC
+Audio codec: AAC
+Pixel format: yuv420p
+Color: BT.709 jika sumber BT.709
+Container: MP4
+
+Metadata yang tidak diperlukan boleh dibersihkan.
+
+Jangan menambahkan metadata palsu.
+
+Jangan mengklaim video "WhatsApp optimized" jika sistem tidak benar-benar melakukan optimasi.
+
+12. Validasi hasil
+
+Setelah encoding selesai, jalankan FFprobe lagi pada file output.
+
+Bandingkan:
+
+INPUT
+vs
+OUTPUT
+
+Minimal:
+
+- file size
+- duration
+- width
+- height
+- FPS
+- video codec
+- video bitrate
+- pixel format
+- color space
+- audio codec
+- audio sample rate
+- audio channels
+- audio bitrate
+
+Pastikan durasi output tidak berubah secara signifikan.
+
+Jika input 30 detik, output seharusnya tetap sekitar 30 detik.
+
+Pastikan audio tidak menjadi out-of-sync.
+
+13. Quality validation
+
+Jangan hanya membandingkan ukuran file.
+
+Jika memungkinkan, hitung metrik kualitas antara input dan output menggunakan FFmpeg, seperti:
+
+- PSNR
+- SSIM
+- VMAF jika tersedia
+
+Gunakan metrik tersebut sebagai indikator internal untuk memilih encoding yang lebih baik.
+
+Jika VMAF tersedia, prioritaskan VMAF sebagai salah satu indikator kualitas.
+
+Namun jangan membuat aplikasi gagal hanya karena VMAF tidak tersedia.
+
+Implementasikan fallback:
+
+VMAF
+↓ jika tidak tersedia
+SSIM / PSNR
+↓ jika tidak tersedia
+parameter-based validation
+
+14. Hindari generasi kualitas palsu
+
+Aplikasi tidak boleh:
+
+- mengubah 720p menjadi 1080p lalu mengklaim HD
+- mengubah 30 FPS menjadi 60 FPS lalu mengklaim video lebih smooth
+- menaikkan bitrate tanpa meningkatkan informasi visual
+- menambahkan sharpening ekstrem
+- menambahkan noise
+- melakukan artificial enhancement yang menyebabkan artifact
+
+Fokus utama adalah:
+
+preserve source quality + efficient encoding
+
+15. Analisis sebelum encoding
+
+Buat fungsi seperti:
+
+analyzeVideo()
+
+yang mengembalikan struktur data terorganisasi.
+
+Contoh:
+
+type VideoAnalysis = {
+  file: {
+    name: string
+    size: number
+    mimeType: string
+    extension: string
+  }
+
+  container: {
+    format: string
+    duration: number
+    bitrate: number
+  }
+
+  video: {
+    codec: string
+    width: number
+    height: number
+    fps: number
+    bitrate: number
+    pixelFormat: string
+    colorSpace?: string
+    colorPrimaries?: string
+    transferCharacteristics?: string
+    colorRange?: string
+  }
+
+  audio?: {
+    codec: string
+    sampleRate: number
+    channels: number
+    bitrate: number
+  }
+
+  recommendation: {
+    targetWidth: number
+    targetHeight: number
+    targetFps: number
+    targetVideoBitrate: number
+    targetAudioBitrate: number
+    codec: string
+    pixelFormat: string
+  }
+}
+
+16. Buat recommendation engine
+
+Buat fungsi:
+
+recommendEncoding(videoAnalysis)
+
+Fungsi ini harus menentukan parameter encoding berdasarkan hasil analisis.
+
+Contoh output:
+
+type EncodingRecommendation = {
+  codec: "libx264"
+  width: number
+  height: number
+  fps: number
+  videoBitrate: number
+  audioCodec: "aac"
+  audioBitrate: number
+  audioSampleRate: number
+  pixelFormat: "yuv420p"
+  preset: string
+  crf: number
+  fastStart: boolean
+}
+
+Gunakan CRF sebagai salah satu mekanisme utama kontrol kualitas.
+
+Pertimbangkan rentang CRF yang sesuai untuk H.264, tetapi jangan menentukan nilai secara sembarangan. Recommendation engine harus dapat menyesuaikan CRF dengan:
+
+- resolusi
+- FPS
+- source bitrate
+- kompleksitas video
+- target ukuran
+- kualitas yang diinginkan
+
+Jika menggunakan CRF, gunakan bitrate cap atau strategi tambahan jika diperlukan untuk mencegah ukuran file menjadi terlalu besar.
+
+17. Jangan selalu mengompres jika tidak diperlukan
+
+Jika video input sudah sangat efisien dan memiliki kualitas yang baik, sistem harus dapat mendeteksi bahwa re-encoding mungkin justru menurunkan kualitas.
+
+Misalnya:
+
+input H.264
+1080p
+30fps
+bitrate sudah efisien
+
+Dalam kondisi tertentu, recommendation engine boleh menyarankan:
+
+Minimal processing
+
+atau encoding dengan parameter konservatif.
+
+Jangan melakukan re-encode agresif hanya karena user memasukkan video.
+
+18. WhatsApp Status sebagai target penggunaan
+
+Aplikasi ditujukan untuk video yang nantinya akan diunggah ke WhatsApp Status.
+
+Karena platform tujuan dapat melakukan transcoding ulang, tujuan aplikasi bukan menjamin bahwa WhatsApp tidak akan melakukan kompresi lagi.
+
+Tujuan yang benar adalah menyediakan file input yang:
+
+- kompatibel
+- memiliki resolusi yang sesuai
+- memiliki codec yang umum
+- memiliki bitrate yang rasional
+- memiliki frame rate yang benar
+- memiliki audio yang kompatibel
+- memiliki color metadata yang benar
+- sudah dikompresi secara efisien
+
+Dengan demikian, hindari klaim seperti:
+
+"100% lossless after WhatsApp upload"
+
+atau:
+
+"WhatsApp will never compress this video"
+
+Gunakan konsep:
+
+Optimized for WhatsApp Status
+
+sebagai tujuan teknis, bukan jaminan platform.
+
+19. Backend processing
+
+Karena FFmpeg merupakan proses server-side, jangan menjalankan FFmpeg secara tidak aman.
+
+Jangan memasukkan nama file user secara langsung ke shell command.
+
+Gunakan "spawn"/"execFile" dengan array arguments.
+
+Contoh konsep:
+
+spawn("ffmpeg", [
+  "-i",
+  inputPath,
+  "-c:v",
+  "libx264",
+  ...
+])
+
+Jangan:
+
+exec(`ffmpeg -i ${userInput} ...`)
+
+untuk menghindari command injection.
+
+Validasi:
+
+- extension
+- MIME type
+- file size
+- path
+- filename
+
+Gunakan temporary directory untuk processing.
+
+Hapus file temporary setelah processing selesai.
+
+20. Upload security
+
+Tambahkan validasi:
+
+- maksimum ukuran file
+- jenis MIME yang diizinkan
+- extension yang diizinkan
+- filename sanitization
+- random temporary filename
+- timeout processing
+- cleanup setelah selesai
+
+Jangan percaya MIME type dari browser saja.
+
+Gunakan FFprobe untuk memastikan file benar-benar merupakan media yang valid.
+
+21. API architecture
+
+Buat endpoint/server action yang jelas untuk:
+
+POST /api/analyze
+
+untuk analisis video.
+
+Dan:
+
+POST /api/compress
+
+untuk melakukan encoding.
+
+Jika lebih baik menggunakan satu endpoint untuk workflow tertentu, tetap pisahkan logic:
+
+upload
+→ validation
+→ ffprobe analysis
+→ recommendation engine
+→ ffmpeg encoding
+→ output ffprobe
+→ validation
+→ result
+
+Jangan mencampur seluruh logic ke satu file besar.
+
+22. Progress processing
+
+Encoding video dapat memerlukan waktu.
+
+Implementasikan progress tracking jika memungkinkan.
+
+Gunakan informasi progress FFmpeg seperti:
+
+frame
+fps
+bitrate
+total_size
+out_time
+speed
+progress
+
+Konversikan menjadi persentase berdasarkan durasi input.
+
+Contoh:
+
+0%
+25%
+50%
+75%
+100%
+
+Jangan menampilkan progress 100% sebelum FFmpeg benar-benar selesai dan output telah divalidasi.
+
+Workflow:
+
+Encoding finished
+↓
+Output validation
+↓
+Success
+↓
+100%
+
+23. Hasil akhir
+
+Setelah berhasil, kembalikan:
+
+{
+  success: true,
+
+  input: {
+    filename: "...",
+    size: 30408704,
+    duration: 30,
+    width: 1080,
+    height: 1080,
+    fps: 60,
+    bitrate: 7488616
+  },
+
+  output: {
+    filename: "...",
+    size: 12345678,
+    duration: 30,
+    width: 1080,
+    height: 1080,
+    fps: 60,
+    bitrate: 3500000,
+    codec: "h264",
+    audioCodec: "aac"
+  },
+
+  compression: {
+    originalSize: 30408704,
+    outputSize: 12345678,
+    savedBytes: 18063026,
+    savedPercent: 59.4
+  },
+
+  downloadUrl: "..."
+}
+
+24. Informasi diagnostik
+
+Sediakan fungsi untuk menampilkan hasil analisis dengan informasi yang mirip dengan output:
+
+File Name
+File Size
+File Type
+MIME Type
+Duration
+Image Width
+Image Height
+Image Size
+Video Codec
+Compressor
+Video Bitrate
+Average Bitrate
+Video Frame Rate
+Pixel Format
+Color Primaries
+Transfer Characteristics
+Matrix Coefficients
+Video Full Range Flag
+Audio Format
+Audio Channels
+Audio Sample Rate
+Audio Bits Per Sample
+Rotation
+
+Tidak harus menampilkan semua metadata kepada user secara default, tetapi data tersebut harus tersedia di sistem analisis.
+
+25. Struktur project
+
+Gunakan struktur Next.js yang bersih dan modular.
+
+Contoh:
+
+app/
+  page.tsx
+  api/
+    analyze/
+      route.ts
+    compress/
+      route.ts
+
+lib/
+  ffmpeg/
+    probe.ts
+    encode.ts
+    progress.ts
+
+  video/
+    analyzer.ts
+    recommendation.ts
+    validation.ts
+    metadata.ts
+
+  utils/
+    file.ts
+    format.ts
+    security.ts
+
+types/
+  video.ts
+  encoding.ts
+
+Sesuaikan struktur jika ada pendekatan Next.js yang lebih baik, tetapi jangan membuat seluruh aplikasi berada dalam satu file.
+
+26. Environment
+
+Pastikan aplikasi dapat berjalan pada environment yang memiliki:
+
+Node.js
+Next.js
+FFmpeg
+FFprobe
+
+Dokumentasikan kebutuhan instalasi FFmpeg dan FFprobe.
+
+Jika deployment environment tidak menyediakan FFmpeg, dokumentasikan dengan jelas bahwa FFmpeg harus tersedia.
+
+Jangan menggunakan library browser yang berpura-pura menjalankan FFmpeg native jika hal tersebut menyebabkan performa buruk untuk video besar.
+
+27. Error handling
+
+Tangani kasus:
+
+- file bukan video
+- file corrupt
+- FFprobe gagal
+- codec tidak dikenali
+- video tidak memiliki video stream
+- durasi tidak valid
+- resolusi tidak valid
+- audio stream corrupt
+- FFmpeg gagal
+- disk temporary penuh
+- processing timeout
+- file terlalu besar
+- output gagal divalidasi
+
+Berikan error yang jelas dan jangan membocorkan command internal atau informasi sensitif server.
+
+28. Preservasi kualitas
+
+Prinsip utama encoding:
+
+Jangan mengejar ukuran file terkecil.
+Kejar ukuran file yang masuk akal dengan kehilangan kualitas sekecil mungkin.
+
+Contoh prioritas:
+
+1. Validitas file
+2. Kompatibilitas
+3. Resolusi
+4. Frame rate
+5. Color fidelity
+6. Visual quality
+7. Audio quality
+8. File size
+
+Jika harus memilih antara:
+
+file 8 MB dengan kualitas buruk
+
+dan:
+
+file 15 MB dengan kualitas jauh lebih baik
+
+pilih file 15 MB jika ukuran tersebut masih rasional untuk target penggunaan.
+
+29. Jangan mengarang batasan WhatsApp
+
+Jangan hardcode klaim mengenai batas ukuran, resolusi, durasi, atau bitrate WhatsApp kecuali nilai tersebut berasal dari dokumentasi resmi yang dapat diverifikasi.
+
+Pisahkan:
+
+technical optimization
+
+dari:
+
+platform-specific limits
+
+Jika sebuah batas platform diperlukan, jadikan configurable constant agar dapat diperbarui tanpa mengubah seluruh sistem.
+
+30. Kualitas implementasi
+
+Kode harus:
+
+- TypeScript
+- strongly typed
+- modular
+- mudah dipelihara
+- aman
+- memiliki error handling
+- tidak menggunakan "any" secara berlebihan
+- tidak menggunakan shell interpolation untuk input user
+- tidak menyimpan file user secara permanen
+- membersihkan temporary files
+- menggunakan asynchronous processing
+- tidak memblokir event loop dengan proses CPU-heavy secara langsung
+
+Berikan komentar hanya pada bagian logic yang memang kompleks.
+
+31. Acceptance criteria
+
+Aplikasi dianggap berhasil jika:
+
+Test 1
+
+Input:
+
+1080x1080
+60fps
+H.264
+AAC
+BT.709
+~7.6 Mbps
+30 seconds
+~29 MB
+
+Output harus berusaha mempertahankan:
+
+1080x1080
+60fps
+H.264
+AAC
+BT.709
+
+tetapi dengan bitrate/ukuran yang lebih efisien.
+
+Test 2
+
+Input:
+
+1080x1920
+30fps
+H.264
+
+Output tetap:
+
+1080x1920
+30fps
+
+jika tidak ada alasan teknis untuk menurunkannya.
+
+Test 3
+
+Input:
+
+2160x3840
+
+Output boleh downscale secara proporsional ke resolusi yang lebih sesuai, tanpa stretching dan tanpa upscale.
+
+Test 4
+
+Input 720p tidak boleh di-upscale menjadi 1080p hanya untuk terlihat lebih HD.
+
+Test 5
+
+Input 30 FPS tidak boleh dipalsukan menjadi 60 FPS.
+
+Test 6
+
+Video dengan audio harus tetap memiliki audio dan tidak mengalami desynchronization.
+
+Test 7
+
+Output harus dapat dibaca kembali oleh FFprobe.
+
+Test 8
+
+Output harus menggunakan MP4 + H.264 + AAC dengan parameter kompatibel.
+
+Test 9
+
+File temporary harus dibersihkan setelah proses selesai.
+
+Test 10
+
+Nama file/path berbahaya tidak boleh menyebabkan command injection.
+
+32. Hasil yang saya inginkan dari AI coding agent
+
+Jangan hanya memberikan contoh kode.
+
+Bangun implementasi aplikasi Adjust Quality yang benar-benar dapat dijalankan.
+
+Buat:
+
+1. Next.js project structure.
+2. TypeScript types.
+3. Video upload handling.
+4. FFprobe analyzer.
+5. Metadata parser.
+6. Encoding recommendation engine.
+7. FFmpeg encoder.
+8. Progress tracking.
+9. Output validation.
+10. Compression statistics.
+11. Download handling.
+12. Error handling.
+13. Temporary file cleanup.
+14. Security validation.
+15. Environment/configuration documentation.
+16. README dengan cara menjalankan aplikasi.
+17. Contoh command FFmpeg/FFprobe yang digunakan.
+18. Test untuk recommendation engine.
+19. Test untuk metadata parsing.
+20. Test untuk validasi hasil.
+
+Jangan membuat implementasi palsu dengan fungsi "compressVideo()" yang hanya mengembalikan file input.
+
+FFmpeg harus benar-benar melakukan encoding.
+
+Pastikan seluruh workflow dapat berjalan:
+
+USER SELECT VIDEO
+        ↓
+UPLOAD
+        ↓
+VALIDATE FILE
+        ↓
+FFPROBE
+        ↓
+ANALYZE VIDEO
+        ↓
+DETERMINE OPTIMAL PARAMETERS
+        ↓
+FFMPEG ENCODE
+        ↓
+FFPROBE OUTPUT
+        ↓
+VALIDATE OUTPUT
+        ↓
+CALCULATE COMPRESSION STATISTICS
+        ↓
+RETURN OUTPUT VIDEO
+        ↓
+USER DOWNLOADS VIDEO
+
+Fokus utama seluruh implementasi adalah:
+
+"Kompresi cerdas untuk mempertahankan kualitas HD video semaksimal mungkin saat digunakan sebagai WhatsApp Status."
+
+Jangan mengorbankan resolusi, FPS, warna, atau kualitas visual hanya demi mendapatkan ukuran file yang paling kecil.
